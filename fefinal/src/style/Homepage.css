@@ -1,0 +1,166 @@
+/* src/style/Homepage.css */
+
+body, html {
+  margin: 0;
+  padding: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #f5f8fa;
+  color: #333;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.homepage {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.homepage-content {
+  flex: 1;
+  display: flex;
+  height: 100%;
+}
+
+/* Sidebar bên trái */
+.sidebar {
+  background-color: #ffffff;
+  box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+  padding: 20px;
+  width: 300px;
+  overflow-y: auto;
+}
+
+.sidebar h2 {
+  margin-top: 0;
+  margin-bottom: 1rem;
+  color: #2c3e50;
+  font-weight: 700;
+  border-bottom: 2px solid #4caf50; /* xanh lá */
+  padding-bottom: 0.5rem;
+}
+
+/* Nút thêm sự kiện */
+.add-event-button {
+  background-color: #4caf50; /* xanh lá */
+  border: none;
+  color: white;
+  padding: 10px 16px;
+  font-size: 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-bottom: 1rem;
+  transition: background-color 0.3s ease;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.add-event-button:hover {
+  background-color: #45a049;
+}
+
+/* Mỗi sự kiện trong sidebar */
+.event-item {
+  background-color: #e8f5e9; /* xanh nhạt */
+  padding: 12px 16px;
+  border-radius: 6px;
+  margin-bottom: 1rem;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+}
+
+.event-item h4 {
+  margin: 0 0 0.3rem 0;
+  color: #2e7d32;
+  font-weight: 600;
+}
+
+.event-item p {
+  margin: 0.2rem 0;
+  font-size: 0.9rem;
+  color: #555;
+  word-wrap: break-word;
+}
+
+/* Nút chỉnh sửa và xóa */
+.edit-button, .delete-button {
+  cursor: pointer;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 4px;
+  font-size: 0.85rem;
+  margin-top: 8px;
+  transition: background-color 0.3s ease;
+}
+
+.edit-button {
+  background-color: #2196f3;
+  color: white;
+  margin-right: 8px;
+}
+
+.edit-button:hover {
+  background-color: #1976d2;
+}
+
+.delete-button {
+  background-color: #f44336;
+  color: white;
+}
+
+.delete-button:hover {
+  background-color: #d32f2f;
+}
+
+/* Phần lịch bên phải */
+.calendar-section {
+  flex: 1;
+  padding: 20px;
+  background-color: white;
+  box-shadow: -2px 0 5px rgba(0,0,0,0.1);
+  overflow-y: auto;
+}
+
+.calendar-section h2 {
+  margin-top: 0;
+  margin-bottom: 1rem;
+  color: #2c3e50;
+  font-weight: 700;
+  border-bottom: 2px solid #4caf50;
+  padding-bottom: 0.5rem;
+}
+
+/* Tùy chỉnh sự kiện trên lịch */
+.fc-event {
+  background-color: #4caf50 !important; /* xanh lá */
+  border: none !important;
+  border-radius: 4px !important;
+  font-weight: 600 !important;
+  color: white !important;
+  padding: 2px 6px !important;
+  cursor: pointer;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.15);
+}
+
+/* Khi hover sự kiện trên lịch */
+.fc-event:hover {
+  background-color: #388e3c !important;
+}
+
+/* Responsive nhỏ */
+@media (max-width: 768px) {
+  .homepage-content {
+    flex-direction: column;
+  }
+
+  .sidebar {
+    width: 100%;
+    height: 250px;
+    box-shadow: none;
+    border-bottom: 1px solid #ddd;
+  }
+
+  .calendar-section {
+    width: 100%;
+    height: calc(100vh - 250px);
+  }
+}

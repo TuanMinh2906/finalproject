@@ -1,0 +1,171 @@
+import React, { useState } from 'react';
+import './style/Calendar.css';
+
+const Calendar = ({ events, setEvents }) => {
+  const [editingIndex, setEditingIndex] = useState(null);
+  const [editedEvent, setEditedEvent] = useState({ title: '', date: '', description: '' });
+  const [searchTerm, setSearchTerm] = useState('');
+  const [modalEvent, setModalEvent] = useState(null);
+
+  const formatDateForInput = (dateStr) => {
+    if (!dateStr) return '';
+    const date = new Date(dateStr);
+    if (isNaN(date.getTime())) return '';
+    const isoStr = date.toISOString();
+    return isoStr.substring(0, 16);
+  };
+
+  const handleDelete = (index) => {
+    const newEvents = [...events];
+    newEvents.splice(index, 1);
+    setEvents(newEvents);
+  };
+
+  const handleEditClick = (index) => {
+    setEditingIndex(index);
+    setEditedEvent({ ...events[index] });
+  };
+
+  const handleEditChange = (e) => {
+    const { name, value } = e.target;
+    setEditedEvent((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleSaveEdit = () => {
+    if (!editedEvent.title.trim()) {
+      alert('Title cannot be empty');
+      return;
+    }
+    if (!editedEvent.date || isNaN(new Date(editedEvent.date).getTime())) {
+      alert('Please enter a valid date');
+      return;
+    }
+    const newEvents = [...events];
+    newEvents[editingIndex] = editedEvent;
+    setEvents(newEvents);
+    setEditingIndex(null);
+  };
+
+  // Lọc sự kiện theo searchTerm (theo title)
+  const filteredEvents = events.filter((event) => {
+    const title = event.title || event.eventName || '';
+    return title.toLowerCase().includes(searchTerm.toLowerCase());
+  });
+
+  // Hiển thị ngày đẹp trong modal và list
+  const formatDisplayDate = (dateStr) => {
+    const date = new Date(dateStr);
+    if (isNaN(date.getTime())) return 'Invalid date';
+    return date.toLocaleString();
+  };
+
+  return (
+    <div className="calendar-container">
+      <h2 className="calendar-title">Your Events</h2>
+
+      {/* Search box */}
+      <input
+        type="text"
+        placeholder="Search by title..."
+        value={searchTerm}
+        onChange={(e) => setSearchTerm(e.target.value)}
+        className="search-input"
+      />
+
+      {filteredEvents.length === 0 ? (
+        <p className="no-events">No events found.</p>
+      ) : (
+        <div>
+          <div className="calendar-header">
+            <div className="col title-col">Title</div>
+            <div className="col date-col">Date</div>
+            <div className="col description-col">Description</div>
+            <div className="col actions-col">Actions</div>
+          </div>
+
+          {filteredEvents.map((event, index) => {
+            // tìm index gốc trong events để thao tác edit/delete
+            const originalIndex = events.indexOf(event);
+
+            if (editingIndex === originalIndex) {
+              return (
+                <div key={originalIndex} className="calendar-row editing-row">
+                  <input
+                    type="text"
+                    name="title"
+                    value={editedEvent.title}
+                    onChange={handleEditChange}
+                    placeholder="Title"
+                    className="edit-input title-input"
+                    autoFocus
+                  />
+                  <input
+                    type="datetime-local"
+                    name="date"
+                    value={formatDateForInput(editedEvent.date)}
+                    onChange={handleEditChange}
+                    className="edit-input date-input"
+                  />
+                  <textarea
+                    name="description"
+                    value={editedEvent.description}
+                    onChange={handleEditChange}
+                    placeholder="Description"
+                    rows={1}
+                    className="edit-textarea description-textarea"
+                  />
+                  <div className="actions-col actions-buttons">
+                    <button onClick={handleSaveEdit} className="btn save-btn">Save</button>
+                    <button onClick={() => setEditingIndex(null)} className="btn cancel-btn">Cancel</button>
+                  </div>
+                </div>
+              );
+            }
+
+            return (
+              <div
+                key={originalIndex}
+                className="calendar-row"
+              >
+                <div
+                  className="col title-col event-title"
+                  title={event.title || event.eventName}
+                  onClick={() => setModalEvent(event)}
+                  style={{ cursor: 'pointer', color: '#007bff', textDecoration: 'underline' }}
+                >
+                  {event.title || event.eventName}
+                </div>
+                <div className="col date-col">{formatDisplayDate(event.date || event.eventDate)}</div>
+                <div
+                  className="col description-col"
+                  title={event.description || event.eventDescription}
+                >
+                  {event.description || event.eventDescription}
+                </div>
+                <div className="col actions-col">
+                  <button onClick={() => handleEditClick(originalIndex)} className="btn edit-btn">Edit</button>
+                  <button onClick={() => handleDelete(originalIndex)} className="btn delete-btn">Delete</button>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      )}
+
+      {/* Modal popup */}
+      {modalEvent && (
+        <div className="modal-overlay" onClick={() => setModalEvent(null)}>
+          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+            <h3>{modalEvent.title || modalEvent.eventName}</h3>
+            <p><strong>Date:</strong> {formatDisplayDate(modalEvent.date || modalEvent.eventDate)}</p>
+            <p><strong>Description:</strong></p>
+            <p>{modalEvent.description || modalEvent.eventDescription || 'No description'}</p>
+            <button className="btn close-btn" onClick={() => setModalEvent(null)}>Close</button>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default Calendar;

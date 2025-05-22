@@ -1,0 +1,139 @@
+.profile-container {
+  max-width: 900px;
+  margin: 20px auto;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: #2f4f2f; /* dark green text */
+
+  max-height: 90vh;       /* Giới hạn chiều cao */
+  overflow-y: auto;       /* Cho phép scroll dọc khi nội dung vượt quá */
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.profile-layout {
+  display: flex;
+  gap: 30px;
+}
+
+.profile-card {
+  background: #e6f2e6; /* very light green background */
+  padding: 25px;
+  border-radius: 12px;
+  flex: 1;
+  box-shadow: 0 0 10px rgba(0, 100, 0, 0.15);
+}
+
+.avatar {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid #2f4f2f;
+  margin-bottom: 20px;
+}
+
+.form label {
+  display: block;
+  margin: 12px 0 6px;
+  font-weight: 600;
+  color: #2f4f2f;
+}
+
+.form input[type="text"],
+.form input[type="email"],
+.form input[type="date"],
+.form select,
+.form input[type="file"] {
+  width: 100%;
+  padding: 8px 10px;
+  border-radius: 6px;
+  border: 1.5px solid #4caf50; /* medium green border */
+  outline-color: #2f4f2f;
+  font-size: 14px;
+  box-sizing: border-box;
+}
+
+.buttons {
+  margin-top: 20px;
+  display: flex;
+  gap: 12px;
+}
+
+button.save {
+  background-color: #4caf50;
+  border: none;
+  color: white;
+  padding: 9px 20px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background-color 0.3s ease;
+}
+
+button.save:hover {
+  background-color: #388e3c;
+}
+
+button.cancel {
+  background-color: #a5d6a7;
+  border: none;
+  padding: 9px 20px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+  color: #2f4f2f;
+  transition: background-color 0.3s ease;
+}
+
+button.cancel:hover {
+  background-color: #81c784;
+}
+
+.info p {
+  margin: 8px 0;
+  font-size: 15px;
+}
+
+button.edit {
+  margin-top: 20px;
+  background-color: #4caf50;
+  border: none;
+  color: white;
+  padding: 10px 25px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background-color 0.3s ease;
+}
+
+button.edit:hover {
+  background-color: #388e3c;
+}
+
+.schedule-section {
+  flex: 1;
+  background: #e6f2e6;
+  padding: 25px;
+  border-radius: 12px;
+  box-shadow: 0 0 10px rgba(0, 100, 0, 0.15);
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
+.schedule-section h3 {
+  color: #2f4f2f;
+  border-bottom: 2px solid #4caf50;
+  padding-bottom: 6px;
+  margin-bottom: 12px;
+}
+
+.schedule-section ul {
+  list-style: none;
+  padding-left: 0;
+}
+
+.schedule-section ul li {
+  margin-bottom: 10px;
+  font-size: 15px;
+}
