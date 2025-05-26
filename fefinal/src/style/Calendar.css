@@ -1,5 +1,3 @@
-/* Calendar.css */
-
 .calendar-container {
   padding: 24px;
   max-width: 1000px;
@@ -38,7 +36,7 @@
 
 .calendar-header {
   font-weight: bold;
-  background-color: #e8f5e9; /* ✅ Đã đổi từ #e3f2fd (xanh dương nhạt) sang xanh lá nhạt */
+  background-color: #e8f5e9; /* ✅ xanh lá nhạt */
 }
 
 .calendar-row:nth-child(even) {
@@ -47,6 +45,10 @@
 
 .calendar-row.editing-row {
   background-color: #fff9c4;
+}
+
+.calendar-row:hover {
+  background-color: #f9f9f9;
 }
 
 .col {
@@ -61,10 +63,10 @@
 .location-col { width: 10%; }
 .participants-col { width: 15%; }
 .category-col { width: 10%; }
-.actions-col { 
-  width: 10%; 
-  display: flex; 
-  gap: 4px; 
+.actions-col {
+  width: 10%;
+  display: flex;
+  gap: 4px;
   justify-content: center;
   flex-wrap: nowrap;          /* ✅ Đảm bảo không xuống dòng */
 }
@@ -158,4 +160,10 @@
 .modal-content h3 {
   margin-top: 0;
   color: #007bff;
+}
+
+.event-title {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
