@@ -3,8 +3,17 @@ import './style/Calendar.css';
 
 const Calendar = ({ events, setEvents }) => {
   const [editingIndex, setEditingIndex] = useState(null);
-  const [editedEvent, setEditedEvent] = useState({ title: '', date: '', description: '' });
+  const [editedEvent, setEditedEvent] = useState({
+    title: '',
+    date: '',
+    description: '',
+    location: '',
+    attendees: '',
+    completed: false,
+    category: '',
+  });
   const [searchTerm, setSearchTerm] = useState('');
+  const [categoryFilter, setCategoryFilter] = useState('all');
   const [modalEvent, setModalEvent] = useState(null);
 
   const formatDateForInput = (dateStr) => {
@@ -27,8 +36,12 @@ const Calendar = ({ events, setEvents }) => {
   };
 
   const handleEditChange = (e) => {
-    const { name, value } = e.target;
-    setEditedEvent((prev) => ({ ...prev, [name]: value }));
+    const { name, value, type, checked } = e.target;
+    if (type === 'checkbox') {
+      setEditedEvent((prev) => ({ ...prev, [name]: checked }));
+    } else {
+      setEditedEvent((prev) => ({ ...prev, [name]: value }));
+    }
   };
 
   const handleSaveEdit = () => {
@@ -46,13 +59,21 @@ const Calendar = ({ events, setEvents }) => {
     setEditingIndex(null);
   };
 
-  // Lọc sự kiện theo searchTerm (theo title)
+  const toggleCompleted = (index) => {
+    const newEvents = [...events];
+    newEvents[index].completed = !newEvents[index].completed;
+    setEvents(newEvents);
+  };
+
+  // *** Filter với chuẩn hóa chữ thường để filter category hoạt động chuẩn ***
   const filteredEvents = events.filter((event) => {
-    const title = event.title || event.eventName || '';
-    return title.toLowerCase().includes(searchTerm.toLowerCase());
+    const title = (event.title || event.eventName || '').toLowerCase();
+    const category = (event.category || '').toLowerCase();
+    const matchesSearch = title.includes(searchTerm.toLowerCase());
+    const matchesCategory = categoryFilter === 'all' || category === categoryFilter.toLowerCase();
+    return matchesSearch && matchesCategory;
   });
 
-  // Hiển thị ngày đẹp trong modal và list
   const formatDisplayDate = (dateStr) => {
     const date = new Date(dateStr);
     if (isNaN(date.getTime())) return 'Invalid date';
@@ -63,7 +84,25 @@ const Calendar = ({ events, setEvents }) => {
     <div className="calendar-container">
       <h2 className="calendar-title">Your Events</h2>
 
-      {/* Search box */}
+      <select
+        value={categoryFilter}
+        onChange={(e) => setCategoryFilter(e.target.value)}
+        style={{
+          marginBottom: '12px',
+          padding: '8px 12px',
+          fontSize: '1rem',
+          borderRadius: '5px',
+          border: '1px solid #ccc',
+          width: '200px',
+        }}
+      >
+        <option value="all">All categories</option>
+        <option value="work">Work</option>
+        <option value="personal">Personal</option>
+        <option value="meeting">Meeting</option>
+        <option value="birthday">Birthday</option>
+      </select>
+
       <input
         type="text"
         placeholder="Search by title..."
@@ -77,19 +116,30 @@ const Calendar = ({ events, setEvents }) => {
       ) : (
         <div>
           <div className="calendar-header">
+            <div className="col status-col">Done</div>
             <div className="col title-col">Title</div>
             <div className="col date-col">Date</div>
             <div className="col description-col">Description</div>
+            <div className="col location-col">Location</div>
+            <div className="col participants-col">Attendees</div>
+            <div className="col category-col">Category</div>
             <div className="col actions-col">Actions</div>
           </div>
 
           {filteredEvents.map((event, index) => {
-            // tìm index gốc trong events để thao tác edit/delete
             const originalIndex = events.indexOf(event);
 
             if (editingIndex === originalIndex) {
               return (
                 <div key={originalIndex} className="calendar-row editing-row">
+                  <input
+                    type="checkbox"
+                    name="completed"
+                    checked={editedEvent.completed}
+                    onChange={handleEditChange}
+                    className="edit-checkbox"
+                    title="Mark as completed"
+                  />
                   <input
                     type="text"
                     name="title"
@@ -114,6 +164,36 @@ const Calendar = ({ events, setEvents }) => {
                     rows={1}
                     className="edit-textarea description-textarea"
                   />
+                  <input
+                    type="text"
+                    name="location"
+                    value={editedEvent.location}
+                    onChange={handleEditChange}
+                    placeholder="Location"
+                    className="edit-input location-input"
+                  />
+                  <input
+                    type="text"
+                    name="attendees"
+                    value={editedEvent.attendees}
+                    onChange={handleEditChange}
+                    placeholder="Emails (comma separated)"
+                    className="edit-input participants-input"
+                  />
+                  <select
+                    name="category"
+                    value={editedEvent.category}
+                    onChange={handleEditChange}
+                    className="edit-input"
+                    style={{ width: '130px' }}
+                  >
+                    <option value="">Select category</option>
+                    <option value="work">Work</option>
+                    <option value="personal">Personal</option>
+                    <option value="meeting">Meeting</option>
+                    <option value="birthday">Birthday</option>
+                  </select>
+
                   <div className="actions-col actions-buttons">
                     <button onClick={handleSaveEdit} className="btn save-btn">Save</button>
                     <button onClick={() => setEditingIndex(null)} className="btn cancel-btn">Cancel</button>
@@ -123,10 +203,15 @@ const Calendar = ({ events, setEvents }) => {
             }
 
             return (
-              <div
-                key={originalIndex}
-                className="calendar-row"
-              >
+              <div key={originalIndex} className="calendar-row">
+                <div className="col status-col">
+                  <input
+                    type="checkbox"
+                    checked={event.completed || false}
+                    onChange={() => toggleCompleted(originalIndex)}
+                    title="Mark as completed"
+                  />
+                </div>
                 <div
                   className="col title-col event-title"
                   title={event.title || event.eventName}
@@ -136,12 +221,12 @@ const Calendar = ({ events, setEvents }) => {
                   {event.title || event.eventName}
                 </div>
                 <div className="col date-col">{formatDisplayDate(event.date || event.eventDate)}</div>
-                <div
-                  className="col description-col"
-                  title={event.description || event.eventDescription}
-                >
-                  {event.description || event.eventDescription}
+                <div className="col description-col" title={event.description}>
+                  {event.description || '-'}
                 </div>
+                <div className="col location-col" title={event.location || '-'}>{event.location || '-'}</div>
+                <div className="col participants-col" title={event.attendees || '-'}>{event.attendees || '-'}</div>
+                <div className="col category-col" title={event.category || '-'}>{event.category || '-'}</div>
                 <div className="col actions-col">
                   <button onClick={() => handleEditClick(originalIndex)} className="btn edit-btn">Edit</button>
                   <button onClick={() => handleDelete(originalIndex)} className="btn delete-btn">Delete</button>
@@ -152,7 +237,6 @@ const Calendar = ({ events, setEvents }) => {
         </div>
       )}
 
-      {/* Modal popup */}
       {modalEvent && (
         <div className="modal-overlay" onClick={() => setModalEvent(null)}>
           <div className="modal-content" onClick={(e) => e.stopPropagation()}>
@@ -160,7 +244,17 @@ const Calendar = ({ events, setEvents }) => {
             <p><strong>Date:</strong> {formatDisplayDate(modalEvent.date || modalEvent.eventDate)}</p>
             <p><strong>Description:</strong></p>
             <p>{modalEvent.description || modalEvent.eventDescription || 'No description'}</p>
-            <button className="btn close-btn" onClick={() => setModalEvent(null)}>Close</button>
+            <p><strong>Location:</strong> {modalEvent.location || 'N/A'}</p>
+            <p><strong>Attendees (emails):</strong></p>
+            <ul>
+              {(modalEvent.attendees || '')
+                .split(',')
+                .map((email, i) => (
+                  <li key={i}>{email.trim()}</li>
+                ))}
+            </ul>
+            <p><strong>Category:</strong> {modalEvent.category || 'N/A'}</p>
+            <button onClick={() => setModalEvent(null)} className="btn close-btn">Close</button>
           </div>
         </div>
       )}

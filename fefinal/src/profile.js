@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import './style/Profile.css';
 
-function Profile() {
+function Profile({ events }) {
   const [isEditing, setIsEditing] = useState(false);
   const [userInfo, setUserInfo] = useState({
     name: 'Nguyễn Văn A',
@@ -16,21 +16,9 @@ function Profile() {
     bio: '', // bio giới thiệu sẽ chứa các link bạn bè
   });
 
-  // Quản lý danh sách bạn bè (lưu link mạng xã hội)
   const [friends, setFriends] = useState([]);
-
-  // Quản lý danh sách sự kiện (events)
-  const [events, setEvents] = useState([]);
-
-  // State form event mới
-  const [newEvent, setNewEvent] = useState({
-    title: '',
-    date: '',
-    time: '',
-  });
-
   const [avatarFile, setAvatarFile] = useState(null);
-  const [newFriendLink, setNewFriendLink] = useState(''); // input link bạn mới
+  const [newFriendLink, setNewFriendLink] = useState('');
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -49,12 +37,10 @@ function Profile() {
     }
   };
 
-  // Thêm bạn mới vào danh sách friends
   const handleAddFriend = () => {
     if (newFriendLink.trim() === '') return;
     setFriends((prev) => [...prev, newFriendLink.trim()]);
 
-    // Cập nhật bio hiển thị các link bạn bè cách nhau dấu phẩy
     setUserInfo((prev) => ({
       ...prev,
       bio: [...friends, newFriendLink.trim()].join(', '),
@@ -62,37 +48,15 @@ function Profile() {
     setNewFriendLink('');
   };
 
-  // Hàm thay đổi dữ liệu form event mới
-  const handleEventChange = (e) => {
-    const { name, value } = e.target;
-    setNewEvent((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-  };
-
-  // Thêm event mới vào danh sách events
-  const handleAddEvent = (e) => {
-    e.preventDefault();
-    if (newEvent.title.trim() === '' || newEvent.date.trim() === '') {
-      alert('Please enter event title and date.');
-      return;
-    }
-    setEvents((prev) => [...prev, newEvent]);
-    setNewEvent({ title: '', date: '', time: '' });
-  };
-
   const handleSave = () => {
     setIsEditing(false);
     alert('Your information has been updated!');
-    // Upload avatar to server here if needed
   };
 
   return (
     <div className="profile-container">
       <h2>Personal Profile</h2>
       <div className="profile-layout">
-        {/* Left column: Personal info */}
         <div className="profile-card">
           <img src={userInfo.avatar} alt="Avatar" className="avatar" />
 
@@ -138,7 +102,6 @@ function Profile() {
 
               <hr />
 
-              {/* Phần thêm bạn bè */}
               <label>Add Friend (Social Link)</label>
               <input
                 type="url"
@@ -150,63 +113,54 @@ function Profile() {
                 Add Friend
               </button>
 
-              <hr />
-
-              {/* Phần thêm event mới */}
-              <h3>Add New Event</h3>
-              <label>Title</label>
-              <input
-                type="text"
-                name="title"
-                value={newEvent.title}
-                onChange={handleEventChange}
-                placeholder="Event title"
-              />
-
-              <label>Date</label>
-              <input
-                type="date"
-                name="date"
-                value={newEvent.date}
-                onChange={handleEventChange}
-              />
-
-              <label>Time</label>
-              <input
-                type="time"
-                name="time"
-                value={newEvent.time}
-                onChange={handleEventChange}
-              />
-
-              <button onClick={handleAddEvent} style={{ marginTop: '0.5rem' }}>
-                Add Event
-              </button>
-
               <div className="buttons" style={{ marginTop: '1rem' }}>
-                <button className="save" onClick={handleSave}>Save</button>
-                <button className="cancel" onClick={() => setIsEditing(false)}>Cancel</button>
+                <button className="save" onClick={handleSave}>
+                  Save
+                </button>
+                <button className="cancel" onClick={() => setIsEditing(false)}>
+                  Cancel
+                </button>
               </div>
             </div>
           ) : (
             <div className="info">
-              <p><strong>Name:</strong> {userInfo.name}</p>
-              <p><strong>Email:</strong> {userInfo.email}</p>
-              <p><strong>Birthday:</strong> {userInfo.birthday}</p>
-              <p><strong>Time Zone:</strong> {userInfo.timezone}</p>
-              <p><strong>Notification Settings:</strong> {userInfo.notifications}</p>
-              <p><strong>Linked Accounts:</strong> {userInfo.linkedAccounts}</p>
-              <p><strong>Language:</strong> {userInfo.language}</p>
-              <p><strong>Privacy Settings:</strong> {userInfo.privacy}</p>
+              <p>
+                <strong>Name:</strong> {userInfo.name}
+              </p>
+              <p>
+                <strong>Email:</strong> {userInfo.email}
+              </p>
+              <p>
+                <strong>Birthday:</strong> {userInfo.birthday}
+              </p>
+              <p>
+                <strong>Time Zone:</strong> {userInfo.timezone}
+              </p>
+              <p>
+                <strong>Notification Settings:</strong> {userInfo.notifications}
+              </p>
+              <p>
+                <strong>Linked Accounts:</strong> {userInfo.linkedAccounts}
+              </p>
+              <p>
+                <strong>Language:</strong> {userInfo.language}
+              </p>
+              <p>
+                <strong>Privacy Settings:</strong> {userInfo.privacy}
+              </p>
 
-              <p><strong>Bio (Friends Links):</strong> {userInfo.bio || 'No friends added yet.'}</p>
+              <p>
+                <strong>Bio (Friends Links):</strong> {userInfo.bio || 'No friends added yet.'}
+              </p>
 
               <h3>Friends List</h3>
               {friends.length > 0 ? (
                 <ul>
                   {friends.map((link, i) => (
                     <li key={i}>
-                      <a href={link} target="_blank" rel="noopener noreferrer">{link}</a>
+                      <a href={link} target="_blank" rel="noopener noreferrer">
+                        {link}
+                      </a>
                     </li>
                   ))}
                 </ul>
@@ -214,12 +168,13 @@ function Profile() {
                 <p>No friends added yet.</p>
               )}
 
-              <button className="edit" onClick={() => setIsEditing(true)}>Edit Profile</button>
+              <button className="edit" onClick={() => setIsEditing(true)}>
+                Edit Profile
+              </button>
             </div>
           )}
         </div>
 
-        {/* Right column: Schedules */}
         <div className="schedule-section">
           <h3>Schedule</h3>
           {events.length === 0 ? (

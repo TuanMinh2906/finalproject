@@ -164,3 +164,79 @@ body, html {
     height: calc(100vh - 250px);
   }
 }
+
+body.dark-mode, html.dark-mode {
+  background-color: #121212;
+  color: #e0e0e0;
+}
+
+.dark-mode .sidebar {
+  background-color: #1e1e1e;
+  color: #e0e0e0;
+  border-right: 1px solid #333;
+}
+
+.dark-mode .sidebar h2 {
+  color: #ffffff;
+  border-bottom: 2px solid #81c784;
+}
+
+.dark-mode .add-event-button {
+  background-color: #81c784;
+  color: #000;
+}
+
+.dark-mode .add-event-button:hover {
+  background-color: #66bb6a;
+}
+
+.dark-mode .event-item {
+  background-color: #2c2c2c;
+  color: #e0e0e0;
+}
+
+.dark-mode .event-item h4 {
+  color: #a5d6a7;
+}
+
+.dark-mode .event-item p {
+  color: #bdbdbd;
+}
+
+.dark-mode .edit-button {
+  background-color: #64b5f6;
+  color: black;
+}
+
+.dark-mode .edit-button:hover {
+  background-color: #42a5f5;
+}
+
+.dark-mode .delete-button {
+  background-color: #e57373;
+  color: black;
+}
+
+.dark-mode .delete-button:hover {
+  background-color: #ef5350;
+}
+
+.dark-mode .calendar-section {
+  background-color: #1e1e1e;
+  color: #e0e0e0;
+}
+
+.dark-mode .calendar-section h2 {
+  color: #ffffff;
+  border-bottom: 2px solid #81c784;
+}
+
+/* FullCalendar event styling in dark mode */
+.dark-mode .fc-event {
+  background-color: #81c784 !important;
+  color: black !important;
+}
+
+.dark-mode .fc-event:hover {
+  background-color: #66bb6a !important;
+}

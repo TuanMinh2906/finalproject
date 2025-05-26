@@ -8,11 +8,12 @@ import './style/Homepage.css';
 function Homepage({ events, setEvents }) {
   const navigate = useNavigate();
   const [activeIndex, setActiveIndex] = useState(null);
+  const [isDarkMode, setIsDarkMode] = useState(false); // 👈 Thêm state cho Dark Mode
 
   const handleDeleteEvent = (eventToDelete) => {
     const updatedEvents = events.filter((event) => event !== eventToDelete);
     setEvents(updatedEvents);
-    if (activeIndex !== null) setActiveIndex(null); // đóng popup nếu event bị xóa
+    if (activeIndex !== null) setActiveIndex(null);
   };
 
   const handleEditEvent = (index) => {
@@ -37,7 +38,7 @@ function Homepage({ events, setEvents }) {
   };
 
   return (
-    <div className="homepage">
+    <div className={`homepage ${isDarkMode ? 'dark-mode' : ''}`}>
       <main className="homepage-content" style={{ display: 'flex' }}>
         {/* Sidebar bên trái */}
         <aside
@@ -51,6 +52,17 @@ function Homepage({ events, setEvents }) {
           }}
         >
           <h2>Your Events</h2>
+
+          {/* 🔘 Nút chuyển đổi Light/Dark mode đặt lên trên */}
+          <button
+            onClick={() => setIsDarkMode(!isDarkMode)}
+            className="toggle-mode-button"
+            style={{ marginBottom: '1rem' }}
+          >
+            {isDarkMode ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
+          </button>
+
+          {/* 🟢 Nút thêm sự kiện */}
           <button
             onClick={() => navigate('/add-event')}
             className="add-event-button"
