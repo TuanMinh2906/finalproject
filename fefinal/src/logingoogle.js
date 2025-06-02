@@ -1,27 +1,56 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useGoogleLogin } from '@react-oauth/google';
-import './style/Login.css';
+import axios from 'axios';
 
 function GoogleLoginGemini() {
   const navigate = useNavigate();
+  const [userInfo, setUserInfo] = useState(null);
 
   const login = useGoogleLogin({
-    onSuccess: tokenResponse => {
+    onSuccess: async (tokenResponse) => {
       console.log("Google Access Token:", tokenResponse.access_token);
-      // 👉 Sau khi đăng nhập thành công, chuyển hướng đến trang home
-      navigate('/home');
+
+      try {
+        // Lấy thông tin người dùng từ Google
+        const res = await axios.get('https://www.googleapis.com/oauth2/v3/userinfo', {
+          headers: {
+            Authorization: `Bearer ${tokenResponse.access_token}`,
+          },
+        });
+
+        const user = res.data;
+        console.log("Google User Info:", user);
+
+        // Kiểm tra đúng tài khoản
+        if (user.email === "minh.vdt2906@gmail.com") {
+          setUserInfo(user);
+          navigate('/home');
+        } else {
+          alert("Không đúng tài khoản được phép đăng nhập!");
+        }
+      } catch (err) {
+        console.error("Lỗi khi lấy thông tin người dùng:", err);
+        alert("Không thể lấy thông tin người dùng từ Google.");
+      }
     },
     onError: () => {
       console.log('Google Login Failed');
       alert('Đăng nhập Google thất bại. Vui lòng thử lại.');
     },
-    scope: 'https://www.googleapis.com/auth/cloud-platform',
+    scope: 'openid email profile',
   });
 
   return (
     <div>
       <button onClick={login}>Login with Google</button>
+
+      {userInfo && (
+        <div>
+          <p>Xin chào, {userInfo.name}</p>
+          <p>Email: {userInfo.email}</p>
+        </div>
+      )}
     </div>
   );
 }
