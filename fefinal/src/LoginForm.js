@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import GoogleLoginGemini from './logingoogle';
 import './style/Login.css';
 
 function LoginForm() {
@@ -13,9 +14,9 @@ function LoginForm() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Simple check - thực tế sẽ gọi API kiểm tra đăng nhập
+    // Giả lập kiểm tra đăng nhập
     if (username && password) {
-      navigate('/home'); // 👉 đăng nhập thành công thì chuyển sang homepage
+      navigate('/home');
     } else {
       alert('Please enter both username and password.');
     }
@@ -48,6 +49,11 @@ function LoginForm() {
             Register
           </button>
         </form>
+
+        {/* Đăng nhập bằng Google */}
+        <div style={{ marginTop: '20px', textAlign: 'center' }}>
+          <GoogleLoginGemini />
+        </div>
       </div>
     </div>
   );

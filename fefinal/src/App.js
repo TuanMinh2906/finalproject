@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
+import { GoogleOAuthProvider } from '@react-oauth/google';
+
 import LoginForm from './LoginForm';
 import Register from './Register';
 import Homepage from './Homepage';
@@ -28,7 +30,6 @@ function AppRoutes({ events, setEvents, handleAddEvent }) {
       <Route path="/" element={<LoginForm />} />
       <Route path="/register" element={<Register />} />
       <Route path="/home" element={<Homepage events={events} setEvents={setEvents} />} />
-      {/* Truyền events cho Profile */}
       <Route path="/profile" element={<Profile events={events} />} />
       <Route path="/add-event" element={<AddEvent onSave={handleAddEvent} />} />
       <Route path="/calendar" element={<Calendar events={events} setEvents={setEvents} />} />
@@ -39,7 +40,6 @@ function AppRoutes({ events, setEvents, handleAddEvent }) {
 function App() {
   const [events, setEvents] = useState([]);
 
-  // Hàm xử lý thêm mới hoặc cập nhật event dựa vào index
   const handleAddEvent = (eventData, index) => {
     if (typeof index === 'number') {
       const updatedEvents = [...events];
@@ -51,11 +51,13 @@ function App() {
   };
 
   return (
-    <Router>
-      <LayoutWithNavbar>
-        <AppRoutes events={events} setEvents={setEvents} handleAddEvent={handleAddEvent} />
-      </LayoutWithNavbar>
-    </Router>
+    <GoogleOAuthProvider clientId="913335909200-u33o9h0b9rl2aj8vqb97r3de3hk33h92.apps.googleusercontent.com">
+      <Router>
+        <LayoutWithNavbar>
+          <AppRoutes events={events} setEvents={setEvents} handleAddEvent={handleAddEvent} />
+        </LayoutWithNavbar>
+      </Router>
+    </GoogleOAuthProvider>
   );
 }
 

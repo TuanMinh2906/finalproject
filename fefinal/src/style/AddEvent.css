@@ -1,50 +1,64 @@
 .form-container {
-  max-height: 88vh; /* tăng nhẹ chiều cao */
+  max-height: 85vh; /* giảm nhẹ chiều cao tối đa */
   overflow-y: auto;
-  padding: 18px 20px; /* tăng padding hơn 1 chút */
+  padding: 14px 16px; /* giảm padding */
   margin: 20px auto;
-  max-width: 480px; /* tăng chiều rộng hơn 1 chút */
-  background-color: #fff;
-  border-radius: 8px;
-  box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+  max-width: 360px; /* giảm chiều rộng một chút */
+  background-color: #e6f2e6;
+  border-radius: 12px;
+  box-shadow: 0 4px 14px rgba(0, 100, 0, 0.15);
+  color: #2f4f2f;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 .event-form {
   display: flex;
   flex-direction: column;
-  gap: 11px; /* tăng khoảng cách giữa các phần tử một chút */
+  gap: 10px; /* giảm khoảng cách giữa các phần tử */
 }
 
 .event-form label {
   font-weight: 600;
-  font-size: 0.98rem; /* tăng font-size nhẹ */
+  font-size: 0.95rem;
+  color: #2f4f2f;
 }
 
 .event-form input[type="text"],
 .event-form input[type="datetime-local"],
 .event-form textarea,
 .event-form select {
-  padding: 7px 9px; /* tăng padding nhẹ */
-  font-size: 0.98rem; /* tăng font-size nhẹ */
-  border: 1px solid #ccc;
-  border-radius: 5px;
+  padding: 6px 9px; /* giảm padding nhẹ */
+  font-size: 0.95rem;
+  border: 1.5px solid #4caf50;
+  border-radius: 8px;
   resize: vertical;
   width: 100%;
   box-sizing: border-box;
+  outline-color: #2f4f2f;
+  transition: border-color 0.3s ease;
+}
+
+.event-form input[type="text"]:focus,
+.event-form input[type="datetime-local"]:focus,
+.event-form textarea:focus,
+.event-form select:focus {
+  border-color: #388e3c;
 }
 
 .event-form button {
-  padding: 9px 0; /* tăng padding nút */
-  font-size: 1.05rem; /* tăng font-size nút */
+  padding: 7px 0; /* giảm padding nút */
+  font-size: 1rem;
   font-weight: 700;
-  background-color: #28a745;
+  background-color: #4caf50;
   border: none;
   color: white;
-  border-radius: 6px;
+  border-radius: 10px;
   cursor: pointer;
-  transition: background-color 0.2s ease;
+  transition: background-color 0.3s ease;
+  box-shadow: 0 3px 8px rgba(72, 179, 64, 0.6);
 }
 
 .event-form button:hover {
-  background-color: #218838;
+  background-color: #388e3c;
+  box-shadow: 0 4px 12px rgba(56, 142, 60, 0.8);
 }
