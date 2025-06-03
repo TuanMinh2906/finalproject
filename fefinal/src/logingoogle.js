@@ -9,7 +9,7 @@ function GoogleLoginGemini() {
 
   const login = useGoogleLogin({
     onSuccess: async (tokenResponse) => {
-      console.log("Google Access Token:", tokenResponse.access_token);
+      console.log("🔐 Google Access Token:", tokenResponse.access_token);
 
       try {
         // Lấy thông tin người dùng từ Google
@@ -20,7 +20,12 @@ function GoogleLoginGemini() {
         });
 
         const user = res.data;
-        console.log("Google User Info:", user);
+
+        // Log thông tin người dùng
+        console.log("🟢 Đăng nhập thành công:");
+        console.log(`👤 Tên: ${user.name}`);
+        console.log(`📧 Email: ${user.email}`);
+        console.log(`🖼️ Ảnh đại diện: ${user.picture}`);
 
         // Kiểm tra đúng tài khoản
         if (user.email === "minh.vdt2906@gmail.com") {
@@ -30,12 +35,12 @@ function GoogleLoginGemini() {
           alert("Không đúng tài khoản được phép đăng nhập!");
         }
       } catch (err) {
-        console.error("Lỗi khi lấy thông tin người dùng:", err);
+        console.error("❌ Lỗi khi lấy thông tin người dùng:", err);
         alert("Không thể lấy thông tin người dùng từ Google.");
       }
     },
     onError: () => {
-      console.log('Google Login Failed');
+      console.log('❌ Google Login Failed');
       alert('Đăng nhập Google thất bại. Vui lòng thử lại.');
     },
     scope: 'openid email profile',

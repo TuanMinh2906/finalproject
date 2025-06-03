@@ -1,5 +1,3 @@
-/* src/style/Homepage.css */
-
 body, html {
   margin: 0;
   padding: 0;
@@ -7,7 +5,6 @@ body, html {
   background: linear-gradient(135deg, #81c784, #66bb6a);
   color: #2e3c2f;
   height: 100vh;
-  overflow: hidden;
 }
 
 .homepage {
@@ -22,9 +19,8 @@ body, html {
   height: 100%;
 }
 
-/* Sidebar bên trái */
 .sidebar {
-  background-color: #ffffffdd; /* Trắng trong suốt nhẹ */
+  background-color: rgba(255, 255, 255, 0.87);
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
   padding: 24px 28px;
   width: 320px;
@@ -43,7 +39,6 @@ body, html {
   letter-spacing: 0.03em;
 }
 
-/* Nút thêm sự kiện */
 .add-event-button {
   background-color: #4caf50;
   border: none;
@@ -53,7 +48,7 @@ body, html {
   border-radius: 10px;
   cursor: pointer;
   margin-bottom: 1.4rem;
-  transition: background-color 0.3s ease;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
   width: 100%;
   box-sizing: border-box;
   font-weight: 600;
@@ -65,19 +60,12 @@ body, html {
   box-shadow: 0 7px 18px rgba(56, 142, 60, 0.45);
 }
 
-/* Mỗi sự kiện trong sidebar */
 .event-item {
-  background-color: #e6f4e8; /* xanh nhạt hơn */
+  background-color: #e6f4e8;
   padding: 16px 20px;
   border-radius: 12px;
   margin-bottom: 1.2rem;
   box-shadow: 0 3px 10px rgba(0, 0, 0, 0.07);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-
-.event-item:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.12);
 }
 
 .event-item h4 {
@@ -96,7 +84,6 @@ body, html {
   line-height: 1.4;
 }
 
-/* Nút chỉnh sửa và xóa */
 .edit-button, .delete-button {
   cursor: pointer;
   border: none;
@@ -132,11 +119,10 @@ body, html {
   box-shadow: 0 7px 20px rgba(198, 40, 40, 0.45);
 }
 
-/* Phần lịch bên phải */
 .calendar-section {
   flex: 1;
   padding: 28px 36px;
-  background-color: #ffffffdd; /* Trắng trong suốt nhẹ */
+  background-color: rgba(255, 255, 255, 0.87);
   box-shadow: -4px 0 24px rgba(0, 0, 0, 0.12);
   overflow-y: auto;
   border-radius: 0 12px 12px 0;
@@ -153,7 +139,6 @@ body, html {
   letter-spacing: 0.03em;
 }
 
-/* Tùy chỉnh sự kiện trên lịch */
 .fc-event {
   background-color: #4caf50 !important;
   border: none !important;
@@ -164,10 +149,6 @@ body, html {
   cursor: pointer;
   box-shadow: 0 5px 16px rgba(0,0,0,0.18);
   transition: background-color 0.3s ease;
-}
-
-.fc-event:hover {
-  background-color: #388e3c !important;
 }
 
 /* Responsive nhỏ */
@@ -191,14 +172,13 @@ body, html {
   }
 }
 
-/* ==== DARK MODE nâng cao đẹp hơn ==== */
 body.dark-mode, html.dark-mode {
   background: linear-gradient(135deg, #1b3a1b, #2f5d33);
   color: #cfd8dc;
 }
 
 .dark-mode .sidebar {
-  background-color: #26332edd;
+  background-color: rgba(38, 51, 46, 0.87);
   color: #cfd8dc;
   border-right: 1px solid #2e4a2e;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
@@ -221,14 +201,9 @@ body.dark-mode, html.dark-mode {
 }
 
 .dark-mode .event-item {
-  background-color: #324031dd;
+  background-color: rgba(50, 64, 49, 0.87);
   color: #c8d6c8;
   box-shadow: 0 3px 10px rgba(0, 0, 0, 0.4);
-}
-
-.dark-mode .event-item:hover {
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
-  transform: translateY(-3px);
 }
 
 .dark-mode .event-item h4 {
@@ -262,7 +237,7 @@ body.dark-mode, html.dark-mode {
 }
 
 .dark-mode .calendar-section {
-  background-color: #26332edd;
+  background-color: rgba(38, 51, 46, 0.87);
   color: #cfd8dc;
   box-shadow: -4px 0 24px rgba(0, 0, 0, 0.4);
 }
@@ -275,11 +250,7 @@ body.dark-mode, html.dark-mode {
 .dark-mode .fc-event {
   background-color: #66bb6a !important;
   color: #e0e0e0 !important;
-  border-radius: 10px !important;
-  box-shadow: 0 6px 20px rgba(102, 187, 106, 0.7) !important;
+  border-radius: 8px !important;
+  font-weight: 700 !important;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.25);
 }
-
-.dark-mode .fc-event:hover {
-  background-color: #57a05a !important;
-}
-
