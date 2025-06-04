@@ -14,7 +14,7 @@ const connectionSchema = new mongoose.Schema({
     from: {type: String, required: true}, // node.id
     to: {type: String, required: true} // node.id
     
-    //This code is for connecting node to node and retrieve by using node.id
+    //Thi s code is for connecting node to node and retrieve by using node.id
 });
 
 // the main Schema
