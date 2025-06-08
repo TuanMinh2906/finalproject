@@ -1,3 +1,4 @@
+// Calendar.js
 import React, { useState } from 'react';
 import './style/Calendar.css';
 
@@ -15,6 +16,7 @@ const Calendar = ({ events, setEvents }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [categoryFilter, setCategoryFilter] = useState('all');
   const [modalEvent, setModalEvent] = useState(null);
+  const [hideCompleted, setHideCompleted] = useState(false);
 
   const formatDateForInput = (dateStr) => {
     if (!dateStr) return '';
@@ -65,13 +67,14 @@ const Calendar = ({ events, setEvents }) => {
     setEvents(newEvents);
   };
 
-  // *** Filter với chuẩn hóa chữ thường để filter category hoạt động chuẩn ***
+  // Filter events theo searchTerm, category và ẩn sự kiện đã hoàn thành nếu hideCompleted = true
   const filteredEvents = events.filter((event) => {
     const title = (event.title || event.eventName || '').toLowerCase();
     const category = (event.category || '').toLowerCase();
     const matchesSearch = title.includes(searchTerm.toLowerCase());
     const matchesCategory = categoryFilter === 'all' || category === categoryFilter.toLowerCase();
-    return matchesSearch && matchesCategory;
+    const notHiddenByCompleted = !hideCompleted || !event.completed;
+    return matchesSearch && matchesCategory && notHiddenByCompleted;
   });
 
   const formatDisplayDate = (dateStr) => {
@@ -87,14 +90,7 @@ const Calendar = ({ events, setEvents }) => {
       <select
         value={categoryFilter}
         onChange={(e) => setCategoryFilter(e.target.value)}
-        style={{
-          marginBottom: '12px',
-          padding: '8px 12px',
-          fontSize: '1rem',
-          borderRadius: '5px',
-          border: '1px solid #ccc',
-          width: '200px',
-        }}
+        className="category-select"
       >
         <option value="all">All categories</option>
         <option value="work">Work</option>
@@ -110,6 +106,13 @@ const Calendar = ({ events, setEvents }) => {
         onChange={(e) => setSearchTerm(e.target.value)}
         className="search-input"
       />
+
+      <button
+        onClick={() => setHideCompleted(!hideCompleted)}
+        className="btn hide-btn"
+      >
+        {hideCompleted ? 'Show completed events' : 'Hide completed events'}
+      </button>
 
       {filteredEvents.length === 0 ? (
         <p className="no-events">No events found.</p>
@@ -244,17 +247,10 @@ const Calendar = ({ events, setEvents }) => {
             <p><strong>Date:</strong> {formatDisplayDate(modalEvent.date || modalEvent.eventDate)}</p>
             <p><strong>Description:</strong></p>
             <p>{modalEvent.description || modalEvent.eventDescription || 'No description'}</p>
-            <p><strong>Location:</strong> {modalEvent.location || 'N/A'}</p>
-            <p><strong>Attendees (emails):</strong></p>
-            <ul>
-              {(modalEvent.attendees || '')
-                .split(',')
-                .map((email, i) => (
-                  <li key={i}>{email.trim()}</li>
-                ))}
-            </ul>
-            <p><strong>Category:</strong> {modalEvent.category || 'N/A'}</p>
-            <button onClick={() => setModalEvent(null)} className="btn close-btn">Close</button>
+            <p><strong>Location:</strong> {modalEvent.location || 'No location'}</p>
+            <p><strong>Attendees:</strong> {modalEvent.attendees || 'None'}</p>
+            <p><strong>Category:</strong> {modalEvent.category || 'None'}</p>
+            <button onClick={() => setModalEvent(null)} className="btn close-modal-btn">Close</button>
           </div>
         </div>
       )}

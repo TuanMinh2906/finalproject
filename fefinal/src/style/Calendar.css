@@ -67,12 +67,22 @@
 .status-col { width: 5%; text-align: center; }
 .title-col { width: 15%; }
 .date-col { width: 15%; }
+.day-col {
+  width: 10%;
+  padding: 4px 6px;
+  color: #2f4f2f;
+  font-weight: 600;
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
 .description-col { width: 20%; }
 .location-col { width: 10%; }
 .participants-col { width: 15%; }
 .category-col { width: 10%; }
 .actions-col {
-  width: 10%;
+  width: 15%;
   display: flex;
   gap: 6px;
   justify-content: center;
@@ -102,7 +112,7 @@
 }
 
 .btn {
-  padding: 6px 10px;
+  padding: 6px 12px;
   border: none;
   border-radius: 6px;
   font-size: 0.85rem;
@@ -135,6 +145,11 @@
 
 .btn.close-btn {
   margin-top: 12px;
+  background-color: #4caf50;
+  color: white;
+}
+
+.btn.hide-btn {
   background-color: #4caf50;
   color: white;
 }

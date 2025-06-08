@@ -1,7 +1,7 @@
 // src/AddEvent.js
 import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import './style/AddEvent.css'; // Tách riêng CSS để dễ quản lý
+import './style/AddEvent.css'; 
 
 function AddEvent({ onSave }) {
   const location = useLocation();
