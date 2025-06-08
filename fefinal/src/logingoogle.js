@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useGoogleLogin } from '@react-oauth/google';
 import axios from 'axios';
+import './style/Login.css';
 
 function GoogleLoginGemini() {
   const navigate = useNavigate();
@@ -48,7 +49,7 @@ function GoogleLoginGemini() {
 
   return (
     <div>
-      <button onClick={login}>Login with Google</button>
+      <button onClick={login} className='google-login-button'>Login with Google</button>
 
       {userInfo && (
         <div>

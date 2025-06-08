@@ -106,7 +106,8 @@
 }
 
 .google-login-button {
-  display: flex;
+  display: inline-flex;
+  margin: 0 auto; 
   align-items: center;
   justify-content: center;
   gap: 10px;

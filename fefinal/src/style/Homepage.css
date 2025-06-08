@@ -254,3 +254,19 @@ body.dark-mode, html.dark-mode {
   font-weight: 700 !important;
   box-shadow: 0 6px 18px rgba(0,0,0,0.25);
 }
+
+.darkmode-button {
+  background-color: #4caf50;
+  border: none;
+  color: white;
+  padding: 14px 20px;
+  font-size: 1.1rem;
+  border-radius: 10px;
+  cursor: pointer;
+  margin-bottom: 1.4rem;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+  width: 100%;
+  box-sizing: border-box;
+  font-weight: 600;
+  box-shadow: 0 5px 12px rgba(76, 175, 80, 0.35);
+}
