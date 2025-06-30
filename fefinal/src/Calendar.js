@@ -1,6 +1,6 @@
-// Calendar.js
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './style/Calendar.css';
+import { PieChart, Pie, Cell, Tooltip, Legend } from 'recharts';
 
 const Calendar = ({ events, setEvents }) => {
   const [editingIndex, setEditingIndex] = useState(null);
@@ -17,6 +17,44 @@ const Calendar = ({ events, setEvents }) => {
   const [categoryFilter, setCategoryFilter] = useState('all');
   const [modalEvent, setModalEvent] = useState(null);
   const [hideCompleted, setHideCompleted] = useState(false);
+
+  useEffect(() => {
+    const fetchEvents = async () => {
+      const calendarId = localStorage.getItem('calendarId');
+      const token = localStorage.getItem('token');
+
+      if (!calendarId || !token) {
+        console.warn('Missing calendarId or token');
+        return;
+      }
+
+      try {
+        const res = await fetch(`http://localhost:8003/api/calendar/${calendarId}/notes`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+
+        const data = await res.json();
+
+        const mapped = data.map((note) => ({
+          title: note.title,
+          date: note.assignedDate,
+          description: note.content,
+          category: note.subject || 'General',
+          location: note.location || '',
+          attendees: note.attendees || '',
+          reminder: note.reminder || 0,
+          allDay: note.allDay || false,
+          completed: note.completed || false,
+        }));
+
+        setEvents(mapped);
+      } catch (error) {
+        console.error('Error loading events:', error);
+      }
+    };
+
+    fetchEvents();
+  }, [setEvents]);
 
   const formatDateForInput = (dateStr) => {
     if (!dateStr) return '';
@@ -39,11 +77,10 @@ const Calendar = ({ events, setEvents }) => {
 
   const handleEditChange = (e) => {
     const { name, value, type, checked } = e.target;
-    if (type === 'checkbox') {
-      setEditedEvent((prev) => ({ ...prev, [name]: checked }));
-    } else {
-      setEditedEvent((prev) => ({ ...prev, [name]: value }));
-    }
+    setEditedEvent((prev) => ({
+      ...prev,
+      [name]: type === 'checkbox' ? checked : value,
+    }));
   };
 
   const handleSaveEdit = () => {
@@ -67,9 +104,8 @@ const Calendar = ({ events, setEvents }) => {
     setEvents(newEvents);
   };
 
-  // Filter events theo searchTerm, category và ẩn sự kiện đã hoàn thành nếu hideCompleted = true
   const filteredEvents = events.filter((event) => {
-    const title = (event.title || event.eventName || '').toLowerCase();
+    const title = (event.title || '').toLowerCase();
     const category = (event.category || '').toLowerCase();
     const matchesSearch = title.includes(searchTerm.toLowerCase());
     const matchesCategory = categoryFilter === 'all' || category === categoryFilter.toLowerCase();
@@ -77,176 +113,140 @@ const Calendar = ({ events, setEvents }) => {
     return matchesSearch && matchesCategory && notHiddenByCompleted;
   });
 
+  const todayStr = new Date().toISOString().split('T')[0];
+  const todayEvents = filteredEvents.filter(event => new Date(event.date).toISOString().split('T')[0] === todayStr);
+  const otherEvents = filteredEvents.filter(event => new Date(event.date).toISOString().split('T')[0] !== todayStr);
+
   const formatDisplayDate = (dateStr) => {
     const date = new Date(dateStr);
     if (isNaN(date.getTime())) return 'Invalid date';
     return date.toLocaleString();
   };
 
+  const completedCount = events.filter((e) => e.completed).length;
+  const notCompletedCount = events.filter((e) => !e.completed).length;
+
+  const pieData = [
+    { name: 'Completed', value: completedCount },
+    { name: 'Not Completed', value: notCompletedCount },
+  ];
+  const pieColors = ['#4CAF50', '#F44336'];
+
+  const renderEventRow = (event, index) => {
+    if (editingIndex === index) {
+      return (
+        <div key={index} className="calendar-row editing-row">
+          <input type="checkbox" name="completed" checked={editedEvent.completed} onChange={handleEditChange} className="edit-checkbox" />
+          <input type="text" name="title" value={editedEvent.title} onChange={handleEditChange} className="edit-input title-input" />
+          <input type="datetime-local" name="date" value={formatDateForInput(editedEvent.date)} onChange={handleEditChange} className="edit-input date-input" />
+          <textarea name="description" value={editedEvent.description} onChange={handleEditChange} className="edit-textarea description-textarea" rows={1} />
+          <input type="text" name="location" value={editedEvent.location} onChange={handleEditChange} className="edit-input location-input" />
+          <input type="text" name="attendees" value={editedEvent.attendees} onChange={handleEditChange} className="edit-input participants-input" />
+          <select name="category" value={editedEvent.category} onChange={handleEditChange} className="edit-input" style={{ width: '130px' }}>
+            <option value="">Select category</option>
+            <option value="work">Work</option>
+            <option value="personal">Personal</option>
+            <option value="meeting">Meeting</option>
+            <option value="birthday">Birthday</option>
+          </select>
+          <div className="actions-col actions-buttons">
+            <button onClick={handleSaveEdit} className="btn save-btn">Save</button>
+            <button onClick={() => setEditingIndex(null)} className="btn cancel-btn">Cancel</button>
+          </div>
+        </div>
+      );
+    }
+
+    return (
+      <div key={index} className="calendar-row">
+        <div className="col status-col">
+          <input type="checkbox" checked={event.completed || false} onChange={() => toggleCompleted(index)} />
+        </div>
+        <div className="col title-col event-title" title={event.title} onClick={() => setModalEvent(event)} style={{ cursor: 'pointer', color: '#007bff', textDecoration: 'underline' }}>{event.title}</div>
+        <div className="col date-col">{formatDisplayDate(event.date)}</div>
+        <div className="col description-col">{event.description || '-'}</div>
+        <div className="col location-col">{event.location || '-'}</div>
+        <div className="col participants-col">{event.attendees || '-'}</div>
+        <div className="col category-col">{event.category || '-'}</div>
+        <div className="col actions-col">
+          <button onClick={() => handleEditClick(index)} className="btn edit-btn">Edit</button>
+          <button onClick={() => handleDelete(index)} className="btn delete-btn">Delete</button>
+        </div>
+      </div>
+    );
+  };
+
   return (
     <div className="calendar-container">
       <h2 className="calendar-title">Your Events</h2>
 
-      <select
-        value={categoryFilter}
-        onChange={(e) => setCategoryFilter(e.target.value)}
-        className="category-select"
-      >
-        <option value="all">All categories</option>
-        <option value="work">Work</option>
-        <option value="personal">Personal</option>
-        <option value="meeting">Meeting</option>
-        <option value="birthday">Birthday</option>
-      </select>
+      <div className="calendar-stats">
+        <span>✅ Completed: {completedCount}</span>
+        <span>❌ Not Completed: {notCompletedCount}</span>
+      </div>
 
-      <input
-        type="text"
-        placeholder="Search by title..."
-        value={searchTerm}
-        onChange={(e) => setSearchTerm(e.target.value)}
-        className="search-input"
-      />
+      <div style={{ margin: '2rem auto', maxWidth: 400 }}>
+        <h4 style={{ textAlign: 'center' }}>Event Completion Status</h4>
+        <PieChart width={350} height={300}>
+          <Pie data={pieData} dataKey="value" nameKey="name" outerRadius={100} label>
+            {pieData.map((entry, index) => (
+              <Cell key={`cell-${index}`} fill={pieColors[index % pieColors.length]} />
+            ))}
+          </Pie>
+          <Tooltip />
+          <Legend />
+        </PieChart>
+      </div>
 
-      <button
-        onClick={() => setHideCompleted(!hideCompleted)}
-        className="btn hide-btn"
-      >
-        {hideCompleted ? 'Show completed events' : 'Hide completed events'}
-      </button>
+      {/* FILTER BAR BẮT ĐẦU Ở ĐÂY */}
+      <div className="filter-bar">
+        <select value={categoryFilter} onChange={(e) => setCategoryFilter(e.target.value)}>
+          <option value="all">📂 All categories</option>
+          <option value="work">💼 Work</option>
+          <option value="personal">🏡 Personal</option>
+          <option value="meeting">📅 Meeting</option>
+          <option value="birthday">🎉 Birthday</option>
+        </select>
 
-      {filteredEvents.length === 0 ? (
-        <p className="no-events">No events found.</p>
+        <input
+          type="text"
+          placeholder="🔍 Search by title..."
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+        />
+
+        <button onClick={() => setHideCompleted(!hideCompleted)} className="btn">
+          {hideCompleted ? '👁 Show completed' : '🙈 Hide completed'}
+        </button>
+      </div>
+
+      {(todayEvents.length > 0 || otherEvents.length > 0) ? (
+        <>
+          {todayEvents.length > 0 && (
+            <>
+              <h3 style={{ marginTop: '2rem', color: 'red' }}>🔴 Today's Events</h3>
+              {todayEvents.map((event) => renderEventRow(event, events.indexOf(event)))}
+            </>
+          )}
+
+          {otherEvents.length > 0 && (
+            <>
+              <h3 style={{ marginTop: '2rem', color: '#333' }}>📅 Other Events</h3>
+              {otherEvents.map((event) => renderEventRow(event, events.indexOf(event)))}
+            </>
+          )}
+        </>
       ) : (
-        <div>
-          <div className="calendar-header">
-            <div className="col status-col">Done</div>
-            <div className="col title-col">Title</div>
-            <div className="col date-col">Date</div>
-            <div className="col description-col">Description</div>
-            <div className="col location-col">Location</div>
-            <div className="col participants-col">Attendees</div>
-            <div className="col category-col">Category</div>
-            <div className="col actions-col">Actions</div>
-          </div>
-
-          {filteredEvents.map((event, index) => {
-            const originalIndex = events.indexOf(event);
-
-            if (editingIndex === originalIndex) {
-              return (
-                <div key={originalIndex} className="calendar-row editing-row">
-                  <input
-                    type="checkbox"
-                    name="completed"
-                    checked={editedEvent.completed}
-                    onChange={handleEditChange}
-                    className="edit-checkbox"
-                    title="Mark as completed"
-                  />
-                  <input
-                    type="text"
-                    name="title"
-                    value={editedEvent.title}
-                    onChange={handleEditChange}
-                    placeholder="Title"
-                    className="edit-input title-input"
-                    autoFocus
-                  />
-                  <input
-                    type="datetime-local"
-                    name="date"
-                    value={formatDateForInput(editedEvent.date)}
-                    onChange={handleEditChange}
-                    className="edit-input date-input"
-                  />
-                  <textarea
-                    name="description"
-                    value={editedEvent.description}
-                    onChange={handleEditChange}
-                    placeholder="Description"
-                    rows={1}
-                    className="edit-textarea description-textarea"
-                  />
-                  <input
-                    type="text"
-                    name="location"
-                    value={editedEvent.location}
-                    onChange={handleEditChange}
-                    placeholder="Location"
-                    className="edit-input location-input"
-                  />
-                  <input
-                    type="text"
-                    name="attendees"
-                    value={editedEvent.attendees}
-                    onChange={handleEditChange}
-                    placeholder="Emails (comma separated)"
-                    className="edit-input participants-input"
-                  />
-                  <select
-                    name="category"
-                    value={editedEvent.category}
-                    onChange={handleEditChange}
-                    className="edit-input"
-                    style={{ width: '130px' }}
-                  >
-                    <option value="">Select category</option>
-                    <option value="work">Work</option>
-                    <option value="personal">Personal</option>
-                    <option value="meeting">Meeting</option>
-                    <option value="birthday">Birthday</option>
-                  </select>
-
-                  <div className="actions-col actions-buttons">
-                    <button onClick={handleSaveEdit} className="btn save-btn">Save</button>
-                    <button onClick={() => setEditingIndex(null)} className="btn cancel-btn">Cancel</button>
-                  </div>
-                </div>
-              );
-            }
-
-            return (
-              <div key={originalIndex} className="calendar-row">
-                <div className="col status-col">
-                  <input
-                    type="checkbox"
-                    checked={event.completed || false}
-                    onChange={() => toggleCompleted(originalIndex)}
-                    title="Mark as completed"
-                  />
-                </div>
-                <div
-                  className="col title-col event-title"
-                  title={event.title || event.eventName}
-                  onClick={() => setModalEvent(event)}
-                  style={{ cursor: 'pointer', color: '#007bff', textDecoration: 'underline' }}
-                >
-                  {event.title || event.eventName}
-                </div>
-                <div className="col date-col">{formatDisplayDate(event.date || event.eventDate)}</div>
-                <div className="col description-col" title={event.description}>
-                  {event.description || '-'}
-                </div>
-                <div className="col location-col" title={event.location || '-'}>{event.location || '-'}</div>
-                <div className="col participants-col" title={event.attendees || '-'}>{event.attendees || '-'}</div>
-                <div className="col category-col" title={event.category || '-'}>{event.category || '-'}</div>
-                <div className="col actions-col">
-                  <button onClick={() => handleEditClick(originalIndex)} className="btn edit-btn">Edit</button>
-                  <button onClick={() => handleDelete(originalIndex)} className="btn delete-btn">Delete</button>
-                </div>
-              </div>
-            );
-          })}
-        </div>
+        <p className="no-events">No events found.</p>
       )}
 
       {modalEvent && (
         <div className="modal-overlay" onClick={() => setModalEvent(null)}>
           <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-            <h3>{modalEvent.title || modalEvent.eventName}</h3>
-            <p><strong>Date:</strong> {formatDisplayDate(modalEvent.date || modalEvent.eventDate)}</p>
+            <h3>{modalEvent.title}</h3>
+            <p><strong>Date:</strong> {formatDisplayDate(modalEvent.date)}</p>
             <p><strong>Description:</strong></p>
-            <p>{modalEvent.description || modalEvent.eventDescription || 'No description'}</p>
+            <p>{modalEvent.description || 'No description'}</p>
             <p><strong>Location:</strong> {modalEvent.location || 'No location'}</p>
             <p><strong>Attendees:</strong> {modalEvent.attendees || 'None'}</p>
             <p><strong>Category:</strong> {modalEvent.category || 'None'}</p>

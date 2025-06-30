@@ -1,3 +1,4 @@
+// src/LoginForm.js
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import GoogleLoginGemini from './logingoogle';
@@ -5,20 +6,56 @@ import './style/Login.css';
 
 function LoginForm() {
   const navigate = useNavigate();
-  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
   const handleRegisterClick = () => {
     navigate('/register');
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Giả lập kiểm tra đăng nhập
-    if (username && password) {
-      navigate('/home');
-    } else {
-      alert('Please enter both username and password.');
+
+    try {
+      const response = await fetch('http://localhost:8003/api/users/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email: email,
+          password: password,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        // Lưu token và userId vào localStorage
+        localStorage.setItem('token', data.token);
+        localStorage.setItem('userId', data.userId);
+
+        // Gọi API để lấy calendarId theo userId
+        const calendarResponse = await fetch(`http://localhost:8003/api/calendar/user/${data.userId}`, {
+          headers: {
+            'Authorization': `Bearer ${data.token}`
+          }
+        });
+
+        const calendarData = await calendarResponse.json();
+
+        if (calendarResponse.ok) {
+          localStorage.setItem('calendarId', calendarData.calendarId);
+          navigate('/home');
+        } else {
+          alert('Failed to retrieve calendar information.');
+        }
+      } else {
+        alert(data.message || 'Login failed');
+      }
+    } catch (error) {
+      console.error('Login error:', error);
+      alert('Something went wrong. Please try again.');
     }
   };
 
@@ -31,11 +68,11 @@ function LoginForm() {
       <div className="login-form-container">
         <form className="login-form" onSubmit={handleSubmit}>
           <input
-            type="text"
-            placeholder="Username"
+            type="email"
+            placeholder="Email"
             className="login-input"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
           />
           <input
             type="password"
@@ -50,7 +87,6 @@ function LoginForm() {
           </button>
         </form>
 
-        {/* Đăng nhập bằng Google */}
         <div style={{ marginTop: '20px', textAlign: 'center' }}>
           <GoogleLoginGemini />
         </div>

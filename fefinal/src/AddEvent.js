@@ -1,12 +1,13 @@
 // src/AddEvent.js
 import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import './style/AddEvent.css'; 
+import './style/AddEvent.css';
 
-function AddEvent({ onSave }) {
+function AddEvent() {
   const location = useLocation();
   const navigate = useNavigate();
-  const { eventToEdit, index } = location.state || {};
+  const { eventToEdit } = location.state || {};
+
   const [eventData, setEventData] = useState({
     title: '',
     date: '',
@@ -32,10 +33,44 @@ function AddEvent({ onSave }) {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    onSave(eventData, index);
-    navigate('/home');
+
+    const calendarId = localStorage.getItem('calendarId');
+
+    if (!calendarId) {
+      alert('Missing calendar ID. Please log in again.');
+      return;
+    }
+
+    try {
+      const response = await fetch(`http://localhost:8003/api/calendar/${calendarId}/notes`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${localStorage.getItem('token') || ''}`,
+        },
+        body: JSON.stringify({
+          title: eventData.title,
+          content: eventData.description || '',
+          subject: eventData.category || 'General',
+          assignedDate: eventData.date,
+          calendarId: calendarId,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        alert('✅ Event saved successfully!');
+        navigate('/home');
+      } else {
+        alert(data.message || '❌ Failed to save event.');
+      }
+    } catch (err) {
+      console.error('Save error:', err);
+      alert('🚨 Error occurred while saving.');
+    }
   };
 
   return (

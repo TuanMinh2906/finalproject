@@ -1,3 +1,4 @@
+/* ==== CƠ BẢN ==== */
 body, html {
   margin: 0;
   padding: 0;
@@ -5,6 +6,8 @@ body, html {
   background: linear-gradient(135deg, #81c784, #66bb6a);
   color: #2e3c2f;
   height: 100vh;
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
 }
 
 .homepage {
@@ -17,55 +20,64 @@ body, html {
   flex: 1;
   display: flex;
   height: 100%;
+  overflow: hidden;
 }
 
 .sidebar {
-  background-color: rgba(255, 255, 255, 0.87);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  background-color: rgba(255, 255, 255, 0.92);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
   padding: 24px 28px;
   width: 320px;
   overflow-y: auto;
   border-radius: 12px 0 0 12px;
-  backdrop-filter: blur(10px);
+  backdrop-filter: blur(8px);
+  transition: all 0.3s ease;
 }
 
 .sidebar h2 {
-  margin-top: 0;
-  margin-bottom: 1.2rem;
+  margin: 0 0 1rem 0;
   color: #2f5d33;
   font-weight: 700;
   border-bottom: 3px solid #4caf50;
   padding-bottom: 0.5rem;
-  letter-spacing: 0.03em;
+  letter-spacing: 0.02em;
+  font-size: 1.4rem;
 }
 
-.add-event-button {
+.add-event-button, .darkmode-button {
   background-color: #4caf50;
   border: none;
   color: white;
-  padding: 14px 20px;
-  font-size: 1.1rem;
+  padding: 12px 18px;
+  font-size: 1rem;
   border-radius: 10px;
   cursor: pointer;
-  margin-bottom: 1.4rem;
-  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+  margin-bottom: 1.2rem;
+  transition: all 0.3s ease;
   width: 100%;
-  box-sizing: border-box;
   font-weight: 600;
-  box-shadow: 0 5px 12px rgba(76, 175, 80, 0.35);
+  box-shadow: 0 4px 10px rgba(76, 175, 80, 0.25);
 }
 
-.add-event-button:hover {
-  background-color: #388e3c;
-  box-shadow: 0 7px 18px rgba(56, 142, 60, 0.45);
+.add-event-button:hover,
+.darkmode-button:hover {
+  background-color: #3e9142;
+  box-shadow: 0 6px 16px rgba(56, 142, 60, 0.35);
 }
 
+/* ==== ITEM ==== */
 .event-item {
-  background-color: #e6f4e8;
+  background-color: #e9f7ed;
   padding: 16px 20px;
   border-radius: 12px;
   margin-bottom: 1.2rem;
-  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.07);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  transition: transform 0.2s ease;
+}
+
+.event-item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.1);
 }
 
 .event-item h4 {
@@ -84,16 +96,21 @@ body, html {
   line-height: 1.4;
 }
 
-.edit-button, .delete-button {
+/* ==== BUTTONS ==== */
+.edit-button, .delete-button,
+.repeat-button, .duplicate-button, .close-button {
   cursor: pointer;
   border: none;
   padding: 8px 16px;
   border-radius: 8px;
   font-size: 0.9rem;
-  margin-top: 10px;
-  transition: background-color 0.3s ease, box-shadow 0.3s ease;
   font-weight: 600;
   box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  text-align: center;
+  min-width: 100px;
+  display: inline-block;
+  box-sizing: border-box;
 }
 
 .edit-button {
@@ -119,14 +136,35 @@ body, html {
   box-shadow: 0 7px 20px rgba(198, 40, 40, 0.45);
 }
 
+.repeat-button {
+  background-color: #ff9800;
+  color: white;
+  box-shadow: 0 4px 12px rgba(255, 152, 0, 0.3);
+}
+
+.repeat-button:hover {
+  background-color: #fb8c00;
+}
+
+.duplicate-button {
+  background-color: #007bff;
+  color: white;
+}
+
+.close-button {
+  background-color: #6c757d;
+  color: white;
+}
+
+/* ==== CALENDAR ==== */
 .calendar-section {
   flex: 1;
   padding: 28px 36px;
-  background-color: rgba(255, 255, 255, 0.87);
-  box-shadow: -4px 0 24px rgba(0, 0, 0, 0.12);
+  background-color: rgba(255, 255, 255, 0.92);
+  box-shadow: -4px 0 24px rgba(0, 0, 0, 0.08);
   overflow-y: auto;
   border-radius: 0 12px 12px 0;
-  backdrop-filter: blur(10px);
+  backdrop-filter: blur(8px);
 }
 
 .calendar-section h2 {
@@ -148,37 +186,21 @@ body, html {
   padding: 4px 10px !important;
   cursor: pointer;
   box-shadow: 0 5px 16px rgba(0,0,0,0.18);
-  transition: background-color 0.3s ease;
+  transition: transform 0.2s ease;
 }
 
-/* Responsive nhỏ */
-@media (max-width: 768px) {
-  .homepage-content {
-    flex-direction: column;
-  }
-
-  .sidebar {
-    width: 100%;
-    height: 280px;
-    box-shadow: none;
-    border-radius: 12px 12px 0 0;
-    border-bottom: 1px solid #c8e6c9;
-  }
-
-  .calendar-section {
-    width: 100%;
-    height: calc(100vh - 280px);
-    border-radius: 0 0 12px 12px;
-  }
+.fc-event:hover {
+  transform: scale(1.03);
 }
 
+/* ==== DARK MODE ==== */
 body.dark-mode, html.dark-mode {
   background: linear-gradient(135deg, #1b3a1b, #2f5d33);
   color: #cfd8dc;
 }
 
 .dark-mode .sidebar {
-  background-color: rgba(38, 51, 46, 0.87);
+  background-color: rgba(38, 51, 46, 0.9);
   color: #cfd8dc;
   border-right: 1px solid #2e4a2e;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
@@ -189,19 +211,21 @@ body.dark-mode, html.dark-mode {
   border-bottom: 3px solid #66bb6a;
 }
 
-.dark-mode .add-event-button {
+.dark-mode .add-event-button,
+.dark-mode .darkmode-button {
   background-color: #66bb6a;
   color: #e0e0e0;
   box-shadow: 0 5px 14px rgba(102, 187, 106, 0.4);
 }
 
-.dark-mode .add-event-button:hover {
+.dark-mode .add-event-button:hover,
+.dark-mode .darkmode-button:hover {
   background-color: #57a05a;
   box-shadow: 0 7px 20px rgba(87, 160, 90, 0.55);
 }
 
 .dark-mode .event-item {
-  background-color: rgba(50, 64, 49, 0.87);
+  background-color: rgba(50, 64, 49, 0.92);
   color: #c8d6c8;
   box-shadow: 0 3px 10px rgba(0, 0, 0, 0.4);
 }
@@ -237,7 +261,7 @@ body.dark-mode, html.dark-mode {
 }
 
 .dark-mode .calendar-section {
-  background-color: rgba(38, 51, 46, 0.87);
+  background-color: rgba(38, 51, 46, 0.9);
   color: #cfd8dc;
   box-shadow: -4px 0 24px rgba(0, 0, 0, 0.4);
 }
@@ -255,18 +279,91 @@ body.dark-mode, html.dark-mode {
   box-shadow: 0 6px 18px rgba(0,0,0,0.25);
 }
 
-.darkmode-button {
-  background-color: #4caf50;
-  border: none;
-  color: white;
-  padding: 14px 20px;
-  font-size: 1.1rem;
+/* ==== MODAL ==== */
+.event-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2000;
+}
+
+.modal-content {
+  background-color: #fff;
+  padding: 1.5rem;
   border-radius: 10px;
-  cursor: pointer;
-  margin-bottom: 1.4rem;
-  transition: background-color 0.3s ease, box-shadow 0.3s ease;
-  width: 100%;
-  box-sizing: border-box;
+  width: 400px;
+  max-width: 90%;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+}
+
+/* ==== RESPONSIVE ==== */
+@media (max-width: 768px) {
+  .homepage-content {
+    flex-direction: column;
+  }
+
+  .sidebar {
+    width: 100%;
+    height: 280px;
+    border-radius: 12px 12px 0 0;
+    border-bottom: 1px solid #c8e6c9;
+  }
+
+  .calendar-section {
+    width: 100%;
+    height: calc(100vh - 280px);
+    border-radius: 0 0 12px 12px;
+  }
+}
+
+.fc .fc-toolbar .fc-button {
+  margin: 0 !important;
+  padding: 8px 16px;
+  font-size: 0.95rem;
   font-weight: 600;
-  box-shadow: 0 5px 12px rgba(76, 175, 80, 0.35);
+  border: none;
+  border-radius: 8px;
+  background-color: #4caf50;
+  color: white;
+  box-shadow: 0 4px 10px rgba(76, 175, 80, 0.25);
+  transition: all 0.3s ease;
+}
+
+.fc .fc-toolbar .fc-button:hover {
+  background-color: #388e3c;
+  box-shadow: 0 6px 14px rgba(56, 142, 60, 0.35);
+  transform: translateY(-1px);
+}
+
+.fc .fc-toolbar .fc-button:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(76, 175, 80, 0.5);
+}
+
+.fc .fc-button-primary:not(:disabled).fc-button-active {
+  background-color: #2e7d32 !important;
+  box-shadow: inset 0 0 0 2px #66bb6a;
+}
+
+.event-popup-buttons {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.event-popup-buttons button {
+  width: 100%;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  white-space: nowrap;
 }

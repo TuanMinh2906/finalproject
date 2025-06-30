@@ -13,7 +13,6 @@ function GoogleLoginGemini() {
       console.log("🔐 Google Access Token:", tokenResponse.access_token);
 
       try {
-        // Lấy thông tin người dùng từ Google
         const res = await axios.get('https://www.googleapis.com/oauth2/v3/userinfo', {
           headers: {
             Authorization: `Bearer ${tokenResponse.access_token}`,
@@ -28,13 +27,9 @@ function GoogleLoginGemini() {
         console.log(`📧 Email: ${user.email}`);
         console.log(`🖼️ Ảnh đại diện: ${user.picture}`);
 
-        // Kiểm tra đúng tài khoản
-        if (user.email === "minh.vdt2906@gmail.com") {
-          setUserInfo(user);
-          navigate('/home');
-        } else {
-          alert("Không đúng tài khoản được phép đăng nhập!");
-        }
+        // Không kiểm tra email nữa → cho phép mọi user
+        setUserInfo(user);
+        navigate('/home');
       } catch (err) {
         console.error("❌ Lỗi khi lấy thông tin người dùng:", err);
         alert("Không thể lấy thông tin người dùng từ Google.");
