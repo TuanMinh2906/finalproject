@@ -1,0 +1,89 @@
+.register-page {
+  height: 100vh;
+  background: linear-gradient(135deg, #81c784, #66bb6a);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  position: relative;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.register-header {
+  position: absolute;
+  top: 30px;
+  left: 30px;
+  user-select: none;
+}
+
+.register-logo {
+  font-size: 36px;
+  font-weight: 700;
+  color: #ffffff;
+  text-shadow: 1px 1px 3px rgba(0,0,0,0.3);
+  margin: 0;
+}
+
+.register-form-container {
+  background: #ffffffdd; /* trắng có chút trong suốt */
+  padding: 40px 35px;
+  border-radius: 12px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+  width: 100%;
+  max-width: 360px;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  backdrop-filter: blur(8px);
+}
+
+.register-form {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.register-input {
+  padding: 12px 15px;
+  font-size: 16px;
+  border: 1.8px solid #a5d6a7;
+  border-radius: 8px;
+  transition: border-color 0.3s ease;
+  outline: none;
+}
+
+.register-input:focus {
+  border-color: #4caf50;
+  box-shadow: 0 0 8px #81c784aa;
+}
+
+.register-submit-button {
+  padding: 12px;
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  font-size: 17px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background-color 0.3s ease;
+}
+
+.register-submit-button:hover {
+  background-color: #388e3c;
+}
+
+/* Responsive nhỏ */
+@media (max-width: 400px) {
+  .register-form-container {
+    padding: 30px 20px;
+  }
+  
+  .register-logo {
+    font-size: 28px;
+    left: 15px;
+    top: 20px;
+  }
+}

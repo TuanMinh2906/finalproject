@@ -1,0 +1,64 @@
+.form-container {
+  max-height: 85vh; /* giảm nhẹ chiều cao tối đa */
+  overflow-y: auto;
+  padding: 14px 16px; /* giảm padding */
+  margin: 20px auto;
+  max-width: 360px; /* giảm chiều rộng một chút */
+  background-color: #e6f2e6;
+  border-radius: 12px;
+  box-shadow: 0 4px 14px rgba(0, 100, 0, 0.15);
+  color: #2f4f2f;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.event-form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px; /* giảm khoảng cách giữa các phần tử */
+}
+
+.event-form label {
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: #2f4f2f;
+}
+
+.event-form input[type="text"],
+.event-form input[type="datetime-local"],
+.event-form textarea,
+.event-form select {
+  padding: 6px 9px; /* giảm padding nhẹ */
+  font-size: 0.95rem;
+  border: 1.5px solid #4caf50;
+  border-radius: 8px;
+  resize: vertical;
+  width: 100%;
+  box-sizing: border-box;
+  outline-color: #2f4f2f;
+  transition: border-color 0.3s ease;
+}
+
+.event-form input[type="text"]:focus,
+.event-form input[type="datetime-local"]:focus,
+.event-form textarea:focus,
+.event-form select:focus {
+  border-color: #388e3c;
+}
+
+.event-form button {
+  padding: 7px 0; /* giảm padding nút */
+  font-size: 1rem;
+  font-weight: 700;
+  background-color: #4caf50;
+  border: none;
+  color: white;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  box-shadow: 0 3px 8px rgba(72, 179, 64, 0.6);
+}
+
+.event-form button:hover {
+  background-color: #388e3c;
+  box-shadow: 0 4px 12px rgba(56, 142, 60, 0.8);
+}

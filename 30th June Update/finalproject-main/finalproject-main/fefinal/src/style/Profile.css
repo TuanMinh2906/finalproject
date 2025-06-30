@@ -1,0 +1,213 @@
+/* ===== PROFILE CONTAINER ===== */
+.profile-container {
+  max-width: 1100px;
+  margin: 32px auto;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: linear-gradient(135deg, #f9fdf9, #e6f2e6);
+  padding: 36px;
+  border-radius: 18px;
+  box-shadow: 0 8px 20px rgba(76, 175, 80, 0.2);
+  color: #2f4f2f;
+}
+
+/* ===== LAYOUT ===== */
+.profile-layout {
+  display: flex;
+  gap: 32px;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+/* ===== PROFILE CARD ===== */
+.profile-card {
+  flex: 1 1 480px;
+  background-color: #ffffff;
+  padding: 30px;
+  border-radius: 14px;
+  box-shadow: 0 4px 15px rgba(0, 100, 0, 0.15);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* ===== AVATAR ===== */
+.avatar {
+  width: 160px;
+  height: 160px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 4px solid #4caf50;
+  margin-bottom: 24px;
+  box-shadow: 0 0 12px rgba(76, 175, 80, 0.5);
+}
+
+/* ===== FORM ===== */
+.form label {
+  display: block;
+  margin: 12px 0 6px;
+  font-weight: bold;
+  color: #2f4f2f;
+}
+
+.form input[type="text"],
+.form input[type="email"],
+.form input[type="date"],
+.form input[type="url"],
+.form select,
+.form input[type="file"] {
+  width: 100%;
+  padding: 10px 14px;
+  border-radius: 8px;
+  border: 1.8px solid #4caf50;
+  outline: none;
+  font-size: 15px;
+  box-sizing: border-box;
+  transition: all 0.3s ease;
+}
+
+.form input:focus,
+.form select:focus {
+  border-color: #388e3c;
+  box-shadow: 0 0 6px rgba(76, 175, 80, 0.4);
+}
+
+/* ===== BUTTONS ===== */
+.buttons {
+  margin-top: 20px;
+  display: flex;
+  gap: 14px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+button.save {
+  background-color: #4caf50;
+  border: none;
+  color: white;
+  padding: 10px 24px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 1rem;
+  box-shadow: 0 6px 14px rgba(76, 175, 80, 0.35);
+  transition: background-color 0.3s ease;
+}
+
+button.save:hover {
+  background-color: #388e3c;
+}
+
+button.cancel {
+  background-color: #a5d6a7;
+  border: none;
+  padding: 10px 24px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: bold;
+  color: #2f4f2f;
+  font-size: 1rem;
+  transition: background-color 0.3s ease;
+}
+
+button.cancel:hover {
+  background-color: #81c784;
+}
+
+/* ===== VIEW INFO ===== */
+.info p {
+  margin: 8px 0;
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+/* ===== EDIT PROFILE BUTTON ===== */
+button.edit {
+  margin-top: 24px;
+  background-color: #4caf50;
+  border: none;
+  color: white;
+  padding: 10px 28px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 1.1rem;
+  box-shadow: 0 6px 14px rgba(76, 175, 80, 0.35);
+  transition: background-color 0.3s ease;
+}
+
+button.edit:hover {
+  background-color: #388e3c;
+}
+
+/* ===== FRIEND LIST ===== */
+.info ul {
+  list-style-type: none;
+  padding-left: 0;
+  margin-top: 10px;
+}
+
+.info ul li a {
+  color: #2e7d32;
+  text-decoration: underline;
+}
+
+.info ul li a:hover {
+  color: #1b5e20;
+}
+
+/* ===== SCHEDULE SECTION ===== */
+.schedule-section {
+  flex: 1 1 480px;
+  background-color: #ffffff;
+  padding: 30px;
+  border-radius: 14px;
+  box-shadow: 0 4px 15px rgba(0, 100, 0, 0.12);
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  min-height: 400px;
+}
+
+.schedule-section h3 {
+  color: #2f4f2f;
+  border-bottom: 3px solid #4caf50;
+  padding-bottom: 6px;
+  margin-bottom: 16px;
+  font-size: 1.3rem;
+  font-weight: bold;
+}
+
+.schedule-section ul {
+  list-style: none;
+  padding-left: 0;
+}
+
+.schedule-section ul li {
+  margin-bottom: 10px;
+  font-size: 16px;
+  line-height: 1.5;
+  color: #336633;
+}
+
+/* ===== RESPONSIVE ===== */
+@media screen and (max-width: 768px) {
+  .profile-layout {
+    flex-direction: column;
+  }
+
+  .profile-card,
+  .schedule-section {
+    flex: 1 1 100%;
+  }
+
+  .avatar {
+    width: 120px;
+    height: 120px;
+  }
+
+  button.save,
+  button.cancel,
+  button.edit {
+    width: 100%;
+  }
+}
